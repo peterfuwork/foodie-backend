@@ -14,4 +14,6 @@ module.exports = (app) => {
     app.post('/api/foods/:id', FoodsController.createFood);
 
     app.put('/api/foods/:id/:foodId', FoodsController.editFood);
+
+    app.delete('/api/foods/:id/:foodId', FoodsController.deleteFood);
 };

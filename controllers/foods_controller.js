@@ -39,5 +39,30 @@ module.exports = {
                 message: err.errors
             });
         });
+    },
+
+    deleteFood(req, res) {
+        const userId = req.params.id;
+        const foodId = req.params.foodId;
+
+        Food.findByIdAndRemove({ _id: foodId})
+            .then(food => {
+                User.findOne({ _id: userId})
+                    .then(user => {
+                        const i = user.foods.indexOf(foodId);
+                        if (i > -1) {
+                            user.foods.splice(i, 1);
+                        }
+                        Promise.all([user.save(), food.save()])
+                            .then(() => {
+                                res.send(food).status(204);
+                            });
+                    });
+            })
+            .catch((err) => {
+                res.status(422).send({
+                    message: err.errors
+                });
+            });
     }
 };
