@@ -5,7 +5,8 @@ const FoodSchema = new Schema({
     food_name: String,
     price: Number,
     food_image: String,
-    category: String,
+    category: Array,
+    description: String,
     is_Spicy: Boolean,
     comments: [{
         type: Schema.Types.ObjectId,

@@ -7,7 +7,7 @@ module.exports = {
         const lat = req.body.lat;
         const lon = req.body.lon;
         
-        const YELP_GRAPHQL_URL = 'https://api.yelp.com/v3/businesses/search?term=restaurant&latitude='+ lat +'&longitude=' + lon;
+        const YELP_GRAPHQL_URL = 'https://api.yelp.com/v3/businesses/search?term=restaurant&limit=10&sort_by=rating&latitude='+ lat +'&longitude=' + lon;
 
         axios.get(YELP_GRAPHQL_URL, {
             headers: {
@@ -15,10 +15,10 @@ module.exports = {
             }
         })
         .then(data => res.send(data.data.businesses))
-        // .catch((err) => {
-        //     res.status(422).send({
-        //         message: err.errors
-        //     });
-        // });
+        .catch((err) => {
+            res.status(422).send({
+                message: err.errors
+            });
+        });
     },
 };

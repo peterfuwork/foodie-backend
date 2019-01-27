@@ -12,6 +12,8 @@ module.exports = (app) => {
 
     app.delete('/api/users/:id', UsersController.deleteUser);
 
+    app.get('/api/foods', FoodsController.readFoods);
+
     app.post('/api/foods/:id', FoodsController.createFood);
 
     app.put('/api/foods/:id/:foodId', FoodsController.editFood);

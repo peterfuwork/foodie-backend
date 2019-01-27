@@ -24,6 +24,24 @@ module.exports = {
         });
     },
 
+    readFoods(req, res) {
+        Food.find({})
+            .populate({
+                path: 'comments',
+                model: 'comment',
+                populate: {
+                    path: 'user',
+                    model: 'user'
+                }
+            })
+            .then(foods => res.send(foods))
+            .catch((err) => {
+                res.status(422).send({
+                    message: err.errors
+                });
+            });
+    },
+
     editFood(req, res) {
         const userId = req.params.id;
         const foodId = req.params.foodId;
