@@ -47,12 +47,34 @@ module.exports = {
                     model: 'user'
                 }
             })
+            .populate('restaurants')
             .then(foods => res.send(foods))
             .catch((err) => {
                 res.status(422).send({
                     message: err.errors
                 });
             });
+    },
+
+    readFoodById(req, res) {
+        const foodId = req.params.foodId;
+
+        Food.find({ _id: foodId})
+        .populate({
+            path: 'comments',
+            model: 'comment',
+            populate: {
+                path: 'user',
+                model: 'user'
+            }
+        })
+        .populate('restaurants')
+        .then(food => res.send(food))
+        // .catch((err) => {
+        //     res.status(422).send({
+        //         message: err.errors
+        //     });
+        // });
     },
 
     editFood(req, res) {
