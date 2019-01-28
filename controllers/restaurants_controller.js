@@ -7,9 +7,9 @@ module.exports = {
         const lat = req.body.lat;
         const lon = req.body.lon;
         
-        const YELP_GRAPHQL_URL = 'https://api.yelp.com/v3/businesses/search?term=restaurant&limit=10&sort_by=rating&latitude='+ lat +'&longitude=' + lon;
+        const YELP_API_URL = 'https://api.yelp.com/v3/businesses/search?term=restaurant&limit=10&sort_by=rating&latitude='+ lat +'&longitude=' + lon;
 
-        axios.get(YELP_GRAPHQL_URL, {
+        axios.get(YELP_API_URL, {
             headers: {
                 Authorization: 'Bearer ' + keys.yelp_key
             }
@@ -21,4 +21,15 @@ module.exports = {
             });
         });
     },
+
+    createRestaurant(req, res) {
+        const restaurantProps = req.body;
+        Restaurant.create(restaurantProps)
+            .then(restaurant => res.send(restaurant))
+            .catch((err) => {
+                res.status(422).send({
+                    message: err.errors
+                });
+            });
+    }
 };

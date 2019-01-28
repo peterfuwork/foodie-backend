@@ -1,27 +1,40 @@
 const User = require('../models/user');
 const Food = require('../models/food');
+const Restaurant = require('../models/restaurant');
 
 module.exports = {
     createFood(req, res) {
         const userId = req.params.id;
+        const restaurantId = req.params.restaurantId;
         const foodProps = req.body;
 
         food = new Food(foodProps);
 
-        User.findOne({ _id: userId})
-        .populate('foods')
-        .then((user) => {
-            user.foods.push(food);
-            Promise.all([user.save(), food.save()])
-            .then(() => {
-                res.send(user);
+        Food.create(foodProps)
+            .then(food => {
+                Food.findById(food._id)
+                .populate('restaurants')
+                .then(food => {
+                    Restaurant.findOne({ _id: restaurantId})
+                    .then((restaurant) => {
+                        restaurant.foods.push(food);
+                        food.restaurants.push(restaurant);
+                        User.findOne({ _id: userId})
+                        .then((user) => {
+                            user.foods.push(food);
+                            Promise.all([user.save(), food.save(), restaurant.save()])
+                            .then(() => {
+                                res.send(food);
+                            });
+                        });
+                    });
+                });
+            })
+            .catch((err) => {
+                res.status(422).send({
+                    message: err.errors
+                });
             });
-        })
-        .catch((err) => {
-            res.status(422).send({
-                message: err.errors
-            });
-        });
     },
 
     readFoods(req, res) {

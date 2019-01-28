@@ -14,7 +14,7 @@ module.exports = (app) => {
 
     app.get('/api/foods', FoodsController.readFoods);
 
-    app.post('/api/foods/:id', FoodsController.createFood);
+    app.post('/api/foods/:id/:restaurantId', FoodsController.createFood);
 
     app.put('/api/foods/:id/:foodId', FoodsController.editFood);
 
@@ -27,4 +27,6 @@ module.exports = (app) => {
     app.delete('/api/comments/:foodId/:commentId', CommentsController.deleteComment);
 
     app.post('/api/yelp_restaurants', RestaurantsController.searchYelpRestaurantsNearMe);
+
+    app.post('/api/restaurants', RestaurantsController.createRestaurant);
 };
