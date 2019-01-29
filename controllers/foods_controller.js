@@ -70,11 +70,11 @@ module.exports = {
         })
         .populate('restaurants')
         .then(food => res.send(food))
-        // .catch((err) => {
-        //     res.status(422).send({
-        //         message: err.errors
-        //     });
-        // });
+        .catch((err) => {
+            res.status(422).send({
+                message: err.errors
+            });
+        });
     },
 
     editFood(req, res) {

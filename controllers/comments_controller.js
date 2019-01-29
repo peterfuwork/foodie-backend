@@ -19,7 +19,7 @@ module.exports = {
                     comment.user = user;
                     Promise.all([food.save(), comment.save()])
                     .then(() => {
-                        res.send(food);
+                        res.send(comment);
                     });
                 });
         });
