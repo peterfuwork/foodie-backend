@@ -31,5 +31,15 @@ module.exports = {
                     message: err.errors
                 });
             });
+    },
+
+    readRestaurants(req, res) {
+        Restaurant.find({})
+            .then(restaurants => res.send(restaurants))
+            .catch((err) => {
+                res.status(422).send({
+                    message: err.errors
+                });
+            });
     }
 };

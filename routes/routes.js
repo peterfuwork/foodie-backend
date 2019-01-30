@@ -30,5 +30,7 @@ module.exports = (app) => {
 
     app.post('/api/yelp_restaurants', RestaurantsController.searchYelpRestaurantsNearMe);
 
+    app.get('/api/restaurants', RestaurantsController.readRestaurants);
+
     app.post('/api/restaurants', RestaurantsController.createRestaurant);
 };
