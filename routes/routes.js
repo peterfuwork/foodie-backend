@@ -32,5 +32,7 @@ module.exports = (app) => {
 
     app.get('/api/restaurants', RestaurantsController.readRestaurants);
 
+    app.get('/api/restaurants/:restaurantId', RestaurantsController.readRestaurantById);
+
     app.post('/api/restaurants', RestaurantsController.createRestaurant);
 };
