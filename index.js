@@ -7,7 +7,7 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const routes = require('./routes/routes');
 
-mongoose.connect(keys.mongoURI, { useNewUrlParser: true, useCreateIndex: true });
+mongoose.connect(keys.mongoURI, { useNewUrlParser: true });
 mongoose.connection
         .on('error', (error) => {
             console.warn('Warning', error);
