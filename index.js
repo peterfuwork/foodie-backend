@@ -8,7 +8,7 @@ const cors = require('cors');
 const morgan = require('morgan');
 const routes = require('./routes/routes');
 
-mongoose.connect(keys.mongoURI, { useNewUrlParser: true });
+mongoose.connect(process.env.MONGODB_URI || keys.mongoURI, { useNewUrlParser: true });
 mongoose.connection
         .on('error', (error) => {
             console.warn('Warning', error);
