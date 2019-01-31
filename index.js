@@ -5,6 +5,7 @@ const multer = require("multer");
 const cloudinary = require("cloudinary");
 const bodyParser = require('body-parser');
 const cors = require('cors');
+const morgan = require('morgan');
 const routes = require('./routes/routes');
 
 mongoose.connect(keys.mongoURI, { useNewUrlParser: true });
@@ -48,10 +49,25 @@ const upload = multer({
 });
 
 app.use(cors());
+app.use(morgan(process.env.NODE_ENV !== 'production' ? 'dev' : 'combined'));
 app.use("/uploads", express.static("uploads"));
 app.use(bodyParser.json());
 
 routes(app);
+
+app.use(notFound)
+app.use(errorHandler)
+
+function notFound(req, res, next) {
+  res.status(404).send({error: 'Not found!', status: 404, url: req.originalUrl})
+}
+
+// eslint-disable-next-line
+function errorHandler(err, req, res, next) {
+  console.error('ERROR', err)
+  const stack =  process.env.NODE_ENV !== 'production' ? err.stack : undefined
+  res.status(500).send({error: err.message, stack, url: req.originalUrl})
+}
 
 // Server Setup
 const PORT = process.env.PORT || 4000;
