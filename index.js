@@ -71,5 +71,6 @@ function errorHandler(err, req, res, next) {
 
 // Server Setup
 const PORT = process.env.PORT || 4000;
-app.listen(PORT);
-console.log('server listening on:', PORT);
+app.listen(PORT)
+  .on('error',     console.error.bind(console))
+  .on('listening', console.log.bind(console, 'Listening on http://0.0.0.0:' + PORT))
