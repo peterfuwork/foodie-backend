@@ -15,12 +15,22 @@ module.exports = {
             }
         })
         .then(data => res.send(data.data.businesses))
+        .catch((err) => {
+            res.status(422).send({
+                message: err.errors
+            });
+        });
     },
 
     createRestaurant(req, res) {
         const restaurantProps = req.body;
         Restaurant.create(restaurantProps)
             .then(restaurant => res.send(restaurant))
+            .catch((err) => {
+                res.status(422).send({
+                    message: err.errors
+                });
+            });
     },
 
     readRestaurantById(req, res) {
@@ -35,10 +45,20 @@ module.exports = {
             }
         })
         .then(restaurant=> res.send(restaurant))
+        .catch((err) => {
+            res.status(422).send({
+                message: err.errors
+            });
+        });
     },
 
     readRestaurants(req, res) {
         Restaurant.find({})
             .then(restaurants => res.send(restaurants))
+            .catch((err) => {
+                res.status(422).send({
+                    message: err.errors
+                });
+            });
     }
 };

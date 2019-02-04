@@ -22,6 +22,11 @@ module.exports = {
                         res.send(comment);
                     });
                 });
+        })
+        .catch((err) => {
+            res.status(422).send({
+                message: err.errors
+            });
         });
     },
 
@@ -35,6 +40,11 @@ module.exports = {
         Comment.findByIdAndUpdate({ _id: commentId}, commentProps)
         .then(() => Comment.findById({ _id: commentId}))
         .then(comment => res.send(comment))
+        .catch((err) => {
+            res.status(422).send({
+                message: err.errors
+            });
+        });
     },
 
     deleteComment(req, res) {
@@ -55,5 +65,10 @@ module.exports = {
                             });
                     });
             })
+            .catch((err) => {
+                res.status(422).send({
+                    message: err.errors
+                });
+            });
     }
 };
