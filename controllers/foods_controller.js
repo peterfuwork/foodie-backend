@@ -3,7 +3,7 @@ const Food = require('../models/food');
 const Restaurant = require('../models/restaurant');
 
 module.exports = {
-    createFood(req, res) {
+    createFood(req, res, next) {
         const userId = req.params.id;
         const restaurantId = req.params.restaurantId;
         const foodProps = req.body;
@@ -12,32 +12,28 @@ module.exports = {
 
         Food.create(foodProps)
             .then(food => {
-                Food.findById(food._id)
+                return Food.findById(food._id)
                 .populate('restaurants')
                 .then(food => {
-                    Restaurant.findOne({ _id: restaurantId})
+                    return Restaurant.findOne({ _id: restaurantId})
                     .then((restaurant) => {
                         restaurant.foods.push(food);
                         food.restaurants.push(restaurant);
-                        User.findOne({ _id: userId})
+                        return User.findOne({ _id: userId})
                         .then((user) => {
                             user.foods.push(food);
-                            Promise.all([user.save(), food.save(), restaurant.save()])
+                            return Promise.all([user.save(), food.save(), restaurant.save()])
                             .then(() => {
                                 res.send(food);
                             });
                         });
                     });
                 })
-                .catch((err) => {
-                    res.status(422).send({
-                        message: err.errors
-                    });
-                });
             })
+            .catch(next);
     },
 
-    readFoods(req, res) {
+    readFoods(req, res, next) {
         Food.find({})
             .populate({
                 path: 'comments',
@@ -49,14 +45,10 @@ module.exports = {
             })
             .populate('restaurants')
             .then(foods => res.send(foods))
-            .catch((err) => {
-                res.status(422).send({
-                    message: err.errors
-                });
-            });
+            .catch(next);
     },
 
-    readFoodById(req, res) {
+    readFoodById(req, res, next) {
         const foodId = req.params.foodId;
 
         Food.find({ _id: foodId})
@@ -70,14 +62,10 @@ module.exports = {
         })
         .populate('restaurants')
         .then(food => res.send(food))
-        .catch((err) => {
-            res.status(422).send({
-                message: err.errors
-            });
-        });
+        .catch(next);
     },
 
-    editFood(req, res) {
+    editFood(req, res, next) {
         const userId = req.params.id;
         const foodId = req.params.foodId;
         const foodProps = req.body;
@@ -87,14 +75,10 @@ module.exports = {
         Food.findByIdAndUpdate({ _id: foodId}, foodProps)
         .then(() => Food.findById({ _id: foodId}))
         .then(food => res.send(food))
-        .catch((err) => {
-            res.status(422).send({
-                message: err.errors
-            });
-        });
+        .catch(next)
     },
 
-    deleteFood(req, res) {
+    deleteFood(req, res, next) {
         const userId = req.params.id;
         const foodId = req.params.foodId;
 
@@ -112,10 +96,6 @@ module.exports = {
                             });
                     });
             })
-            .catch((err) => {
-                res.status(422).send({
-                    message: err.errors
-                });
-            });
+            .catch(next);
     }
 };
