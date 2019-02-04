@@ -13,11 +13,11 @@ module.exports = {
         Food.findOne({ _id: foodId})
         .populate('comments')
         .then((food) => {
-            return User.findOne({ _id: userId})
+            User.findOne({ _id: userId})
                 .then(user => {
                     food.comments.push(comment);
                     comment.user = user;
-                    return Promise.all([food.save(), comment.save()])
+                    Promise.all([food.save(), comment.save()])
                     .then(() => {
                         res.send(comment);
                     });
