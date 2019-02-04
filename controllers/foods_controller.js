@@ -30,11 +30,6 @@ module.exports = {
                     });
                 });
             })
-            .catch((err) => {
-                res.status(422).send({
-                    message: err.errors
-                });
-            });
     },
 
     readFoods(req, res) {
@@ -49,11 +44,6 @@ module.exports = {
             })
             .populate('restaurants')
             .then(foods => res.send(foods))
-            .catch((err) => {
-                res.status(422).send({
-                    message: err.errors
-                });
-            });
     },
 
     readFoodById(req, res) {
@@ -70,11 +60,6 @@ module.exports = {
         })
         .populate('restaurants')
         .then(food => res.send(food))
-        .catch((err) => {
-            res.status(422).send({
-                message: err.errors
-            });
-        });
     },
 
     editFood(req, res) {
@@ -87,11 +72,6 @@ module.exports = {
         Food.findByIdAndUpdate({ _id: foodId}, foodProps)
         .then(() => Food.findById({ _id: foodId}))
         .then(food => res.send(food))
-        .catch((err) => {
-            res.status(422).send({
-                message: err.errors
-            });
-        });
     },
 
     deleteFood(req, res) {
@@ -112,10 +92,5 @@ module.exports = {
                             });
                     });
             })
-            .catch((err) => {
-                res.status(422).send({
-                    message: err.errors
-                });
-            });
     }
 };
