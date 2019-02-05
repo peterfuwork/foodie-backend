@@ -12,17 +12,17 @@ module.exports = {
 
         Food.create(foodProps)
             .then(food => {
-                Food.findById(food._id)
+                return Food.findById(food._id)
                 .populate('restaurants')
                 .then(food => {
-                    Restaurant.findOne({ _id: restaurantId})
+                    return Restaurant.findOne({ _id: restaurantId})
                     .then((restaurant) => {
                         restaurant.foods.push(food);
                         food.restaurants.push(restaurant);
-                        User.findOne({ _id: userId})
+                        return User.findOne({ _id: userId})
                         .then((user) => {
                             user.foods.push(food);
-                            Promise.all([user.save(), food.save(), restaurant.save()])
+                            return Promise.all([user.save(), food.save(), restaurant.save()])
                             .then(() => {
                                 res.send(food);
                             });
