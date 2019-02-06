@@ -19,7 +19,8 @@ module.exports = {
                 return Promise.all([Restaurant.findOne({_id: restaurantId}), food])
             })
             .then(data => {
-                console.log(data)
+                let obj = { restaurant: data[0], food: data[1] }
+                console.log(obj)
                 restaurant.foods.push(data.food);
                 data.food.restaurants.push(restaurant);
                 return { ...data, user: User.findOne({ _id: userId})}
