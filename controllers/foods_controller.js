@@ -16,7 +16,8 @@ module.exports = {
                 .populate('restaurants')
             })
             .then(food => {
-                return { food, restaurant: Restaurant.findOne({ _id: restaurantId}) }
+                const restaurant = Restaurant.findOne({ _id: restaurantId});
+                return { food, restaurant }
             })
             .then(data => {
                 console.log(data)
