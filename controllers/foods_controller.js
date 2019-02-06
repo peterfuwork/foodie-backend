@@ -21,6 +21,7 @@ module.exports = {
                         food.restaurants.push(restaurant);
                         return User.findOne({ _id: userId})
                         .then((user) => {
+                            console.log(user);
                             user.foods.push(food);
                             return Promise.all([user.save(), food.save(), restaurant.save()])
                             .then(() => {
