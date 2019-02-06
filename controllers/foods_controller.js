@@ -14,28 +14,26 @@ module.exports = {
             .then(food => {
                 return Food.findById(food._id)
                 .populate('restaurants')
-                .then(food => {
-                    return { food, restaurant: Restaurant.findOne({ _id: restaurantId}) }
-                })
-                .then(data => {
-                    console.log(data)
-                    restaurant.foods.push(data.food);
-                    data.food.restaurants.push(restaurant);
-                    return { ...data, user: User.findOne({ _id: userId})}
-                })
-                .then(data => {
-                    console.log(data);
-                    user.foods.push(food);
-                    return Promise.all([user.save(), food.save(), restaurant.save()])
-                            .then(() => {
-                                res.send(food);
-                            });
+            })
+            .then(food => {
+                return { food, restaurant: Restaurant.findOne({ _id: restaurantId}) }
+            })
+            .then(data => {
+                console.log(data)
+                restaurant.foods.push(data.food);
+                data.food.restaurants.push(restaurant);
+                return { ...data, user: User.findOne({ _id: userId})}
+            })
+            .then(data => {
+                console.log(data);
+                user.foods.push(food);
+                return Promise.all([user.save(), food.save(), restaurant.save()])
+                        .then(() => {
+                            res.send(food);
                         });
-                    });
-                })
             })
             .catch(next);
-    },
+            },
 
     readFoods(req, res, next) {
         Food.find({})
