@@ -20,18 +20,20 @@ module.exports = {
             })
             .then(data => {
                 let obj = { restaurant: data[0], food: data[1] }
-                console.log(obj)
-                restaurant.foods.push(data.food);
-                data.food.restaurants.push(restaurant);
-                return { ...data, user: User.findOne({ _id: userId})}
+                obj.restaurant.foods.push(obj.food);
+                obj.food.restaurants.push(obj.restaurant);
+                return Promise.all([...obj, User.findOne({ _id: userId})])
             })
             .then(data => {
-                console.log(data);
-                user.foods.push(food);
-                return Promise.all([user.save(), food.save(), restaurant.save()])
-                        .then(() => {
-                            res.send(food);
-                        });
+                console.log('data1',data);
+                let obj = { restaurant: data[0], food: data[1], user: data[2] }
+                console.log('obj',obj)
+                obj.user.foods.push(obj.food);
+                return Promise.all([obj.user.save(), obj.food.save(), obj.restaurant.save()]) 
+            })
+            .then((data) => {
+                console.log('data2',data);
+                res.send(data);
             })
             .catch(next);
             },
