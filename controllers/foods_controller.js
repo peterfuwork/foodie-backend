@@ -15,15 +15,18 @@ module.exports = {
                 return Food.findById(food._id)
                 .populate('restaurants')
                 .then(food => {
-                    return Restaurant.findOne({ _id: restaurantId})
-                    .then((restaurant) => {
-                        restaurant.foods.push(food);
-                        food.restaurants.push(restaurant);
-                        return User.findOne({ _id: userId})
-                        .then((user) => {
-                            console.log(user);
-                            user.foods.push(food);
-                            return Promise.all([user.save(), food.save(), restaurant.save()])
+                    return { food, restaurant: Restaurant.findOne({ _id: restaurantId}) }
+                })
+                .then(data => {
+                    console.log(data)
+                    restaurant.foods.push(data.food);
+                    data.food.restaurants.push(restaurant);
+                    return { ...data, user: User.findOne({ _id: userId})}
+                })
+                .then(data => {
+                    console.log(data);
+                    user.foods.push(food);
+                    return Promise.all([user.save(), food.save(), restaurant.save()])
                             .then(() => {
                                 res.send(food);
                             });
