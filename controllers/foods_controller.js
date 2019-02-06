@@ -16,8 +16,7 @@ module.exports = {
                 .populate('restaurants')
             })
             .then(food => {
-                const restaurant = Restaurant.findOne({ _id: restaurantId});
-                return { food, restaurant }
+                return Promise.all([Restaurant.findOne({_id: restaurantId}), food])
             })
             .then(data => {
                 console.log(data)
