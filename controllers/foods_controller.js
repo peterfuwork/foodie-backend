@@ -22,11 +22,11 @@ module.exports = {
                 let obj = { restaurant: data[0], food: data[1] }
                 obj.restaurant.foods.push(obj.food);
                 obj.food.restaurants.push(obj.restaurant);
-                return Promise.all([...obj, User.findOne({ _id: userId})])
+                return Promise.all([obj, User.findOne({ _id: userId})])
             })
             .then(data => {
                 console.log('data1',data);
-                let obj = { restaurant: data[0], food: data[1], user: data[2] }
+                let obj = { restaurant: data[0].restaurant, food: data[0].food, user: data[2] }
                 console.log('obj',obj)
                 obj.user.foods.push(obj.food);
                 return Promise.all([obj.user.save(), obj.food.save(), obj.restaurant.save()]) 
